@@ -1,6 +1,6 @@
 # hasantest-vertex-automl
 
-Vertex AutoML test project
+Vertex AutoML test project - test
 
 ## Getting started
 
