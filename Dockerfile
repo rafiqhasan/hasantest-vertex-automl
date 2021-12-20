@@ -9,8 +9,8 @@ RUN pip install -r requirements.txt
 # WORKDIR /src
 
 # Copy downloaded dependencies.
-COPY --from=builder /root/.local /root/.local
+# COPY --from=builder /root/.local /root/.local
 COPY . .
 
 # Update python path.
-ENV PATH=/root/.local:$PATH
+# ENV PATH=/root/.local:$PATH
