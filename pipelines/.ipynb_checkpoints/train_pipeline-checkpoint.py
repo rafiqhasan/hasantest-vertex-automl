@@ -43,11 +43,11 @@ class pipeline_controller():
     
     def _get_pipeline(self):
         """Main method to Create pipeline"""
-        @pipeline(name=self.display_name,
+        @pipeline(name="automl-tab-beans-training-v2",
                           pipeline_root=self.pipeline_root)
         def pipeline_fn(
             display_name: str = self.display_name,
-            project: str = self.project_id,
+            project_id: str = self.project_id,
             gcp_region: str = self.region,
             api_endpoint: str = "us-central1-aiplatform.googleapis.com",
             thresholds_dict_str: str = '{"auRoc": 0.95}',
@@ -61,20 +61,18 @@ class pipeline_controller():
             # eval_op = kfp.components.load_component('component_specs/classification_eval_model_v2.yaml')
 
             #STEP: For non Auto-ML call
-            training_args = ['--train_file', 'gs://gcs-hasanrafiq-test-331814/ml_data/taxi_dataset/train.csv',
+            training_args = ['--tranform_fn_dir', 'gs://gcs-hasanrafiq-test-331814/ml_data/taxi_dataset/train.csv',
                              '--eval_file', 'gs://gcs-hasanrafiq-test-331814/ml_data/taxi_dataset/eval.csv',
                              '--model_save_location', 'gs://gcs-hasanrafiq-test-331814/ml_data/taxi_dataset/model/',
-                             '--epochs', '10',
-                             '--hidden_layers','2'
+                             '--epochs', 10,
+                             '--hidden_layers',2
                             ]
 
             training_op = gcc_aip.CustomPythonPackageTrainingJobRunOp(
-                            project=project,
+                            project=project_id,
                             display_name=display_name,
                             python_package_gcs_uri="gs://gcs-hasanrafiq-test-331814/ml_data/taxi_dataset/ml_scripts/trainer-0.1.tar.gz",
-                            staging_bucket='gs://cloud-ai-platform-35f2698c-5046-4c70-857e-14cb44e3950a/ml_staging',
-                            base_output_dir='gs://cloud-ai-platform-35f2698c-5046-4c70-857e-14cb44e3950a/ml_staging',
-                            python_module_name="trainer.task",
+                            python_module="trainer.task",
                             container_uri='us-docker.pkg.dev/vertex-ai/training/tf-cpu.2-7:latest',
                             replica_count=1,
                             location=gcp_region,
