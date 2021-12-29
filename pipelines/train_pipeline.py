@@ -55,7 +55,11 @@ class pipeline_controller():
         ):
             
             #Load all reusable custom components
-            eval_op = kfp.components.load_component('component_specs/classification_eval_model.yaml')
+            #Option 1 -> Python function component wrapped as reusable function
+            # eval_op = kfp.components.load_component('component_specs/classification_eval_model.yaml')
+            
+            #Option 2 -> Python component wrapped as reusable package( preferred )
+            eval_op = kfp.components.load_component('component_specs/classification_eval_model_v2.yaml')
 
             #Start pipeline formation
             dataset_create_op = gcc_aip.TabularDatasetCreateOp(
